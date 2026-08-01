@@ -1,0 +1,20 @@
+{
+  "teams": [
+    {"id":"red1","name":"레드 1","color":"#ff526b"},{"id":"red2","name":"레드 2","color":"#c9244b"},
+    {"id":"yellow1","name":"옐로 1","color":"#ffd95a"},{"id":"yellow2","name":"옐로 2","color":"#e9a916"},
+    {"id":"green1","name":"그린 1","color":"#56e39f"},{"id":"green2","name":"그린 2","color":"#159d6b"},
+    {"id":"blue1","name":"블루 1","color":"#5bbcff"},{"id":"blue2","name":"블루 2","color":"#2768d9"}
+  ],
+  "rounds": [
+    {"id":"r1","label":"ROUND 1","time":"09:10–09:40"},
+    {"id":"r2","label":"ROUND 2","time":"09:40–10:10"},
+    {"id":"r3","label":"ROUND 3","time":"10:20–10:50"},
+    {"id":"r4","label":"ROUND 4","time":"10:50–11:20"}
+  ],
+  "matchups": {
+    "A":[["yellow1","blue1"],["red1","blue2"],["yellow2","green2"],["red2","green1"]],
+    "B":[["red2","blue2"],["yellow2","blue1"],["red1","green1"],["yellow1","green2"]],
+    "C":[["yellow2","green1"],["red2","green2"],["yellow1","blue2"],["red1","blue1"]],
+    "D":[["red1","green2"],["yellow1","green1"],["red2","blue1"],["yellow2","blue2"]]
+  }
+}
