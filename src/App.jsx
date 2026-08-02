@@ -8,7 +8,7 @@ const clone=v=>JSON.parse(JSON.stringify(v))
 const numeric=v=>Math.max(0,Number(v)||0)
 const teamScore=(scores,teamId,categories)=>{const value=scores?.[teamId];if(value&&typeof value==='object')return categories.reduce((n,c)=>n+numeric(value[c.id]),0);return numeric(value)}
 function Starfield(){return <div className="starfield" aria-hidden="true"><i/><i/><i/></div>}
-function Brand(){return <div className="brand"><span className="brand-mark"><Star size={17} fill="currentColor"/></span><span><b>D:FORCE</b><small>2026 SUMMER CAMP</small></span></div>}
+function Brand({onHome}){return <button type="button" className="brand" onClick={onHome} aria-label="홈으로 이동"><span className="brand-mark"><Star size={17} fill="currentColor"/></span><span><b>D:FORCE</b><small>2026 SUMMER CAMP</small></span></button>}
 
 export default function App(){
   const [route,setRoute]=useState({page:'home'}),[live,setLive]=useState(emptyState),[online,setOnline]=useState(true),[toast,setToast]=useState(''),[config,setConfig]=useState({ready:false,error:''}),[gate,setGate]=useState(null)
@@ -21,7 +21,7 @@ export default function App(){
   if(config.error)return <main><Starfield/><div className="config-error"><CircleAlert/><h1>설정 파일을 확인해 주세요</h1><p>{config.error}</p><button onClick={()=>location.reload()}><RefreshCw/> 다시 불러오기</button></div></main>
   if(!config.ready)return <main><Starfield/><div className="loading"><Orbit/><b>우주 탐험대 준비 중…</b></div></main>
   const booth=booths.find(b=>b.id===route.booth)
-  return <main><Starfield/><header><Brand/><div className="header-actions">{route.page==='home'&&<button className="admin-button" onClick={()=>protectedGo({page:'admin'})}><Settings/>관리자</button>}<span className={`sync ${online?'ok':''}`}><i/>{online?'LIVE':'OFFLINE'}</span></div></header>
+  return <main><Starfield/><header><Brand onHome={()=>setRoute({page:'home'})}/><div className="header-actions">{route.page==='home'&&<button className="admin-button" onClick={()=>protectedGo({page:'admin'})}><Settings/>관리자</button>}<span className={`sync ${online?'ok':''}`}><i/>{online?'LIVE':'OFFLINE'}</span></div></header>
     {route.page==='home'?<Home enter={(b,role)=>role==='score'?protectedGo({page:'booth',booth:b.id,role,round:'r1'}):setRoute({page:'booth',booth:b.id,role,round:'r1'})}/>:
      route.page==='admin'?<Admin live={live} save={save} setRoute={setRoute} notify={notify}/>:
      <Booth booth={booth} route={route} setRoute={setRoute} protectedGo={protectedGo} live={live} updateRound={updateRound} notify={notify}/>} 
