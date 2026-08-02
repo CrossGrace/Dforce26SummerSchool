@@ -1,0 +1,14 @@
+{
+  "A": [
+    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
+  ],
+  "B": [
+    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
+  ],
+  "C": [
+    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
+  ],
+  "D": [
+    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
+  ]
+}

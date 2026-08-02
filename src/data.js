@@ -59,6 +59,7 @@ const D = {
 
 export let booths = [A,B,C,D].map(b=>({...b,rounds:rounds.map((r,i)=>({...r,teams:pairings[b.id][i]}))}))
 export let teamById = Object.fromEntries(teams.map(t=>[t.id,t]))
+export let scoreConfig = {}
 
 function parseCsv(text, file) {
   const rows=[]; let row=[],cell='',quoted=false
@@ -82,8 +83,9 @@ function parseCsv(text, file) {
 }
 
 export async function loadStaticConfig(){
-  const [schedule,...csvs]=await Promise.all([
+  const [schedule,scores,...csvs]=await Promise.all([
     fetch('/config/schedule.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('schedule.json을 불러올 수 없습니다.');return r.json()}),
+    fetch('/config/score-config.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('score-config.json을 불러올 수 없습니다.');return r.json()}),
     ...['a','b','c','d'].map(id=>fetch(`/config/game-${id}.csv`,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(`game-${id}.csv를 불러올 수 없습니다.`);return r.text()}))
   ])
   if(!Array.isArray(schedule.teams)||!Array.isArray(schedule.rounds)||!schedule.matchups)throw Error('schedule.json 구조가 올바르지 않습니다.')
@@ -96,5 +98,7 @@ export async function loadStaticConfig(){
     return {...b,missions:cards.filter(c=>c.kind==='mission'),items:cards.filter(c=>c.kind==='item'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
   })
   teams=schedule.teams; booths=configured; teamById=Object.fromEntries(teams.map(t=>[t.id,t]))
-  return {teams,booths}
+  for(const b of base){if(!Array.isArray(scores[b.id])||!scores[b.id].length)throw Error(`score-config.json: 게임 ${b.id}의 점수 항목이 없습니다.`);for(const c of scores[b.id])if(!c.id||!c.label||!(c.max>0))throw Error(`score-config.json: 게임 ${b.id} 항목 형식을 확인하세요.`)}
+  scoreConfig=scores
+  return {teams,booths,scoreConfig}
 }

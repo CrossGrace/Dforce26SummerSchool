@@ -13,6 +13,7 @@ npm run dev
 
 - `public/config/schedule.json`: 팀 이름·색상, 라운드 시간, 부스별 대진
 - `public/config/game-a.csv` ~ `game-d.csv`: 게임별 미션 및 아이템
+- `public/config/score-config.json`: 게임별 점수 항목과 항목별 최고점
 
 CSV 열은 `kind,id,title,description,weight` 순서입니다.
 
