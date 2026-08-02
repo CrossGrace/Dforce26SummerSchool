@@ -11,6 +11,7 @@
     {"id":"r3","label":"ROUND 3","time":"10:20–10:50"},
     {"id":"r4","label":"ROUND 4","time":"10:50–11:20"}
   ],
+  "breaks": [{"id":"snack","label":"간식","time":"10:10–10:20"}],
   "matchups": {
     "A":[["yellow1","blue1"],["red1","blue2"],["yellow2","green2"],["red2","green1"]],
     "B":[["red2","blue2"],["yellow2","blue1"],["red1","green1"],["yellow1","green2"]],

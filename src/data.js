@@ -60,6 +60,7 @@ const D = {
 export let booths = [A,B,C,D].map(b=>({...b,rounds:rounds.map((r,i)=>({...r,teams:pairings[b.id][i]}))}))
 export let teamById = Object.fromEntries(teams.map(t=>[t.id,t]))
 export let scoreConfig = {}
+export let scheduleBreaks = [{id:'snack',label:'간식',time:'10:10–10:20'}]
 
 function parseCsv(text, file) {
   const rows=[]; let row=[],cell='',quoted=false
@@ -83,9 +84,10 @@ function parseCsv(text, file) {
 }
 
 export async function loadStaticConfig(){
-  const [schedule,scores,...csvs]=await Promise.all([
+  const [schedule,scores,details,...csvs]=await Promise.all([
     fetch('/config/schedule.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('schedule.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/score-config.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('score-config.json을 불러올 수 없습니다.');return r.json()}),
+    fetch('/config/game-details.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-details.json을 불러올 수 없습니다.');return r.json()}),
     ...['a','b','c','d'].map(id=>fetch(`/config/game-${id}.csv`,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(`game-${id}.csv를 불러올 수 없습니다.`);return r.text()}))
   ])
   if(!Array.isArray(schedule.teams)||!Array.isArray(schedule.rounds)||!schedule.matchups)throw Error('schedule.json 구조가 올바르지 않습니다.')
@@ -95,10 +97,12 @@ export async function loadStaticConfig(){
     const file=`game-${b.id.toLowerCase()}.csv`,cards=parseCsv(csvs[index],file)
     const games=schedule.matchups[b.id]; if(!Array.isArray(games)||games.length!==schedule.rounds.length)throw Error(`schedule.json: 게임 ${b.id}의 대진 수를 확인하세요.`)
     games.flat().forEach(id=>{if(!ids.has(id))throw Error(`schedule.json: 알 수 없는 팀 ID ${id}`)})
-    return {...b,missions:cards.filter(c=>c.kind==='mission'),items:cards.filter(c=>c.kind==='item'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
+    if(!details[b.id]?.title||!Array.isArray(details[b.id]?.rules))throw Error(`game-details.json: 게임 ${b.id} 상세 정보를 확인하세요.`)
+    return {...b,details:details[b.id],missions:cards.filter(c=>c.kind==='mission'),items:cards.filter(c=>c.kind==='item'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
   })
   teams=schedule.teams; booths=configured; teamById=Object.fromEntries(teams.map(t=>[t.id,t]))
   for(const b of base){if(!Array.isArray(scores[b.id])||!scores[b.id].length)throw Error(`score-config.json: 게임 ${b.id}의 점수 항목이 없습니다.`);for(const c of scores[b.id])if(!c.id||!c.label||!(c.max>0))throw Error(`score-config.json: 게임 ${b.id} 항목 형식을 확인하세요.`)}
   scoreConfig=scores
-  return {teams,booths,scoreConfig}
+  scheduleBreaks=Array.isArray(schedule.breaks)?schedule.breaks:scheduleBreaks
+  return {teams,booths,scoreConfig,scheduleBreaks}
 }
