@@ -61,13 +61,15 @@ export let booths = [A,B,C,D].map(b=>({...b,rounds:rounds.map((r,i)=>({...r,team
 export let teamById = Object.fromEntries(teams.map(t=>[t.id,t]))
 export let scoreConfig = {}
 export let scheduleBreaks = [{id:'snack',label:'간식',time:'10:10–10:20'}]
+export let accessConfig = {adminPassword:'1235',scorePassword:'1111'}
 
 export async function loadStaticConfig(){
-  const [schedule,scores,details,cardsConfig]=await Promise.all([
+  const [schedule,scores,details,cardsConfig,access]=await Promise.all([
     fetch('/config/schedule.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('schedule.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/score-config.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('score-config.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/game-details.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-details.json을 불러올 수 없습니다.');return r.json()}),
-    fetch('/config/game-cards.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-cards.json을 불러올 수 없습니다.');return r.json()})
+    fetch('/config/game-cards.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-cards.json을 불러올 수 없습니다.');return r.json()}),
+    fetch('/config/access.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('access.json을 불러올 수 없습니다.');return r.json()})
   ])
   if(!Array.isArray(schedule.teams)||!Array.isArray(schedule.rounds)||!schedule.matchups)throw Error('schedule.json 구조가 올바르지 않습니다.')
   const ids=new Set(schedule.teams.map(t=>t.id)); if(ids.size!==schedule.teams.length)throw Error('schedule.json 팀 ID가 중복되었습니다.')
@@ -85,5 +87,7 @@ export async function loadStaticConfig(){
   for(const b of base){if(!Array.isArray(scores[b.id])||!scores[b.id].length)throw Error(`score-config.json: 게임 ${b.id}의 점수 항목이 없습니다.`);for(const c of scores[b.id])if(!c.id||!c.label||!(c.max>0))throw Error(`score-config.json: 게임 ${b.id} 항목 형식을 확인하세요.`)}
   scoreConfig=scores
   scheduleBreaks=Array.isArray(schedule.breaks)?schedule.breaks:scheduleBreaks
-  return {teams,booths,scoreConfig,scheduleBreaks}
+  if(!/^\d{4}$/.test(String(access.adminPassword))||!/^\d{4}$/.test(String(access.scorePassword)))throw Error('access.json 비밀번호는 숫자 4자리로 입력해 주세요.')
+  accessConfig={adminPassword:String(access.adminPassword),scorePassword:String(access.scorePassword)}
+  return {teams,booths,scoreConfig,scheduleBreaks,accessConfig}
 }

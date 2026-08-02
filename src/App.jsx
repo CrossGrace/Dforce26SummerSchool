@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ArrowLeft, BarChart3, BookOpen, Check, CircleAlert, Clock3, Crown, Gift, Info, LayoutDashboard, LockKeyhole, Medal, NotebookPen, Orbit, RefreshCw, Rocket, Settings, ShieldCheck, Sparkles, Star, Trash2, Trophy, X } from 'lucide-react'
-import { booths, teams, teamById, scoreConfig, scheduleBreaks, loadStaticConfig } from './data'
+import { booths, teams, teamById, scoreConfig, scheduleBreaks, accessConfig, loadStaticConfig } from './data'
 import './operations.css'
 
 const emptyState={version:1,booths:{}}
@@ -35,11 +35,11 @@ export default function App(){
      route.page==='final'?<FinalScores live={live} setRoute={setRoute}/>:
      route.page==='dashboard'?<MonitorDashboard live={live} setRoute={setRoute}/>:
      <Booth booth={booth} route={route} setRoute={setRoute} protectedGo={protectedGo} live={live} updateRound={updateRound} notify={notify}/>} 
-    {gate&&<PinGate cancel={()=>setGate(null)} success={()=>{setRoute(gate);setGate(null)}}/>}{toast&&<div className="toast"><Check size={18}/>{toast}</div>}
+    {gate&&<PinGate password={gate.page==='admin'?accessConfig.adminPassword:accessConfig.scorePassword} cancel={()=>setGate(null)} success={()=>{setRoute(gate);setGate(null)}}/>}{toast&&<div className="toast"><Check size={18}/>{toast}</div>}
   </main>
 }
 
-function PinGate({cancel,success}){const [pin,setPin]=useState(''),[error,setError]=useState(false);const submit=e=>{e.preventDefault();if(pin==='1111')success();else{setPin('');setError(true)}};return <Modal close={cancel}><form className="pin-gate" onSubmit={submit}><span className="modal-icon"><LockKeyhole/></span><p className="eyebrow">AUTHORIZED CREW ONLY</p><h2>접근 비밀번호</h2><p>점수판과 관리자 기능은 운영 선생님만 사용할 수 있습니다.</p><input autoFocus type="password" inputMode="numeric" maxLength="4" value={pin} onChange={e=>{setPin(e.target.value);setError(false)}} placeholder="••••"/><small className={error?'show':''}>비밀번호가 올바르지 않습니다.</small><kbd className="enter-hint">↵ Enter 키로 확인</kbd><button className="primary wide" type="submit"><ShieldCheck/> 확인</button></form></Modal>}
+function PinGate({password,cancel,success}){const [pin,setPin]=useState(''),[error,setError]=useState(false);const submit=e=>{e.preventDefault();if(pin===password)success();else{setPin('');setError(true)}};return <Modal close={cancel}><form className="pin-gate" onSubmit={submit}><span className="modal-icon"><LockKeyhole/></span><p className="eyebrow">AUTHORIZED CREW ONLY</p><h2>접근 비밀번호</h2><p>점수판과 관리자 기능은 운영 선생님만 사용할 수 있습니다.</p><input autoFocus type="password" inputMode="numeric" maxLength="4" value={pin} onChange={e=>{setPin(e.target.value);setError(false)}} placeholder="••••"/><small className={error?'show':''}>비밀번호가 올바르지 않습니다.</small><kbd className="enter-hint">↵ Enter 키로 확인</kbd><button className="primary wide" type="submit"><ShieldCheck/> 확인</button></form></Modal>}
 
 function Home({enter,setRoute}){return <section className="home shell"><div className="hero"><div className="orbit-hero"><div className="planet"><Rocket/></div><span/><span/><span/></div><p className="eyebrow">ORBITAL MISSION CONTROL</p><h1>하나님의 꿈을 향한<br/><em>우주 탐험대</em></h1><p>선생님의 땀방울이 아이들의 별빛이 됩니다.<br/>운영할 게임 부스를 선택해 주세요.</p></div><div className="booth-grid">{booths.map((b,i)=><article className="booth-card" key={b.id} style={{'--accent':b.accent,'--delay':`${i*.08}s`}}><div className="card-space"><span className="booth-code">MISSION {b.id}</span><div className="game-orb">{b.icon}</div><h2>{b.title}</h2><p>{b.short}</p><small>{b.verse}</small></div><div className="role-row"><button onClick={()=>enter(b,'score')}><BarChart3/>점수판</button><button className="ghost" onClick={()=>enter(b,'mission')}><Rocket/>미션판</button></div></article>)}</div><div className="home-public-tools"><button className="dashboard-entry" onClick={()=>setRoute({page:'dashboard'})}><LayoutDashboard/><span><small>LIVE MONITOR</small><b>운영 대시보드</b></span><Orbit/></button><button className="final-score-entry" onClick={()=>setRoute({page:'final'})}><Trophy/><span><small>FINAL RANKING</small><b>최종 점수 확인</b></span><Crown/></button></div><footer>동탄동산교회 디포스 초등부 여름캠프 · 나는 하나님의 꿈이야!</footer></section>}
 
