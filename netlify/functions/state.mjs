@@ -4,7 +4,7 @@ const initial = { version: 1, booths: {} }
 const headers = { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }
 
 export default async (request) => {
-  const store = getStore('dforce-live-state')
+  const store = getStore({ name: 'dforce-live-state', consistency: 'strong' })
   if (request.method === 'GET') {
     const state = await store.get('live', { type: 'json' }) || initial
     return new Response(JSON.stringify(state), { headers })

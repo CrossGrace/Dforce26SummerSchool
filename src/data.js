@@ -62,43 +62,24 @@ export let teamById = Object.fromEntries(teams.map(t=>[t.id,t]))
 export let scoreConfig = {}
 export let scheduleBreaks = [{id:'snack',label:'간식',time:'10:10–10:20'}]
 
-function parseCsv(text, file) {
-  const rows=[]; let row=[],cell='',quoted=false
-  for(let i=0;i<text.length;i++){
-    const c=text[i],n=text[i+1]
-    if(c==='"'&&quoted&&n==='"'){cell+='"';i++}
-    else if(c==='"'){quoted=!quoted}
-    else if(c===','&&!quoted){row.push(cell);cell=''}
-    else if((c==='\n'||c==='\r')&&!quoted){if(c==='\r'&&n==='\n')i++;row.push(cell);if(row.some(Boolean))rows.push(row);row=[];cell=''}
-    else cell+=c
-  }
-  if(cell||row.length){row.push(cell);rows.push(row)}
-  const [header,...body]=rows
-  if(!header||header.join(',')!=='kind,id,title,description,weight') throw new Error(`${file}: 헤더는 kind,id,title,description,weight 이어야 합니다.`)
-  return body.map((r,i)=>{
-    if(r.length!==5)throw new Error(`${file} ${i+2}행: 열이 5개가 아닙니다.`)
-    const [kind,rawId,title,description,rawWeight]=r
-    const weight=Number(rawWeight); if(!['mission','item'].includes(kind)||!title||!description||!(weight>0))throw new Error(`${file} ${i+2}행: kind/title/description/weight를 확인하세요.`)
-    return {kind,id:rawId.replace(/^[MI]-/,''),title,description,weight}
-  })
-}
-
 export async function loadStaticConfig(){
-  const [schedule,scores,details,...csvs]=await Promise.all([
+  const [schedule,scores,details,cardsConfig]=await Promise.all([
     fetch('/config/schedule.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('schedule.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/score-config.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('score-config.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/game-details.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-details.json을 불러올 수 없습니다.');return r.json()}),
-    ...['a','b','c','d'].map(id=>fetch(`/config/game-${id}.csv`,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error(`game-${id}.csv를 불러올 수 없습니다.`);return r.text()}))
+    fetch('/config/game-cards.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-cards.json을 불러올 수 없습니다.');return r.json()})
   ])
   if(!Array.isArray(schedule.teams)||!Array.isArray(schedule.rounds)||!schedule.matchups)throw Error('schedule.json 구조가 올바르지 않습니다.')
   const ids=new Set(schedule.teams.map(t=>t.id)); if(ids.size!==schedule.teams.length)throw Error('schedule.json 팀 ID가 중복되었습니다.')
   const base=[A,B,C,D]
-  const configured=base.map((b,index)=>{
-    const file=`game-${b.id.toLowerCase()}.csv`,cards=parseCsv(csvs[index],file)
+  const configured=base.map(b=>{
+    const gameCards=cardsConfig[b.id]
+    if(!Array.isArray(gameCards?.missions)||!Array.isArray(gameCards?.items))throw Error(`game-cards.json: 게임 ${b.id}의 missions/items를 확인하세요.`)
+    const normalize=(cards,kind)=>cards.map((card,index)=>{const weight=Number(card.weight??1);if(!card.title||!card.description||!(weight>0))throw Error(`game-cards.json: 게임 ${b.id} ${kind} ${index+1}번 항목을 확인하세요.`);return {...card,id:String(card.id??index+1),weight}})
     const games=schedule.matchups[b.id]; if(!Array.isArray(games)||games.length!==schedule.rounds.length)throw Error(`schedule.json: 게임 ${b.id}의 대진 수를 확인하세요.`)
     games.flat().forEach(id=>{if(!ids.has(id))throw Error(`schedule.json: 알 수 없는 팀 ID ${id}`)})
     if(!details[b.id]?.title||!Array.isArray(details[b.id]?.rules))throw Error(`game-details.json: 게임 ${b.id} 상세 정보를 확인하세요.`)
-    return {...b,details:details[b.id],missions:cards.filter(c=>c.kind==='mission'),items:cards.filter(c=>c.kind==='item'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
+    return {...b,details:details[b.id],missions:normalize(gameCards.missions,'missions'),items:normalize(gameCards.items,'items'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
   })
   teams=schedule.teams; booths=configured; teamById=Object.fromEntries(teams.map(t=>[t.id,t]))
   for(const b of base){if(!Array.isArray(scores[b.id])||!scores[b.id].length)throw Error(`score-config.json: 게임 ${b.id}의 점수 항목이 없습니다.`);for(const c of scores[b.id])if(!c.id||!c.label||!(c.max>0))throw Error(`score-config.json: 게임 ${b.id} 항목 형식을 확인하세요.`)}
