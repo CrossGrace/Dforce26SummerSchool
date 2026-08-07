@@ -62,14 +62,16 @@ export let teamById = Object.fromEntries(teams.map(t=>[t.id,t]))
 export let scoreConfig = {}
 export let scheduleBreaks = [{id:'snack',label:'간식',time:'10:10–10:20'}]
 export let accessConfig = {adminPassword:'1235',scorePassword:'1111'}
+export let storyAnswers = {}
 
 export async function loadStaticConfig(){
-  const [schedule,scores,details,cardsConfig,access]=await Promise.all([
+  const [schedule,scores,details,cardsConfig,access,answers]=await Promise.all([
     fetch('/config/schedule.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('schedule.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/score-config.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('score-config.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/game-details.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-details.json을 불러올 수 없습니다.');return r.json()}),
     fetch('/config/game-cards.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('game-cards.json을 불러올 수 없습니다.');return r.json()}),
-    fetch('/config/access.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('access.json을 불러올 수 없습니다.');return r.json()})
+    fetch('/config/access.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('access.json을 불러올 수 없습니다.');return r.json()}),
+    fetch('/config/story-answers.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('story-answers.json을 불러올 수 없습니다.');return r.json()})
   ])
   if(!Array.isArray(schedule.teams)||!Array.isArray(schedule.rounds)||!schedule.matchups)throw Error('schedule.json 구조가 올바르지 않습니다.')
   const ids=new Set(schedule.teams.map(t=>t.id)); if(ids.size!==schedule.teams.length)throw Error('schedule.json 팀 ID가 중복되었습니다.')
@@ -90,5 +92,7 @@ export async function loadStaticConfig(){
   scheduleBreaks=Array.isArray(schedule.breaks)?schedule.breaks:scheduleBreaks
   if(!/^\d{4}$/.test(String(access.adminPassword))||!/^\d{4}$/.test(String(access.scorePassword)))throw Error('access.json 비밀번호는 숫자 4자리로 입력해 주세요.')
   accessConfig={adminPassword:String(access.adminPassword),scorePassword:String(access.scorePassword)}
-  return {teams,booths,scoreConfig,scheduleBreaks,accessConfig}
+  for(const key of ['joseph','lionKing','moses'])if(!answers[key]?.title||!Array.isArray(answers[key]?.entries)||answers[key].entries.length!==15||answers[key].entries.some(x=>!x.scene||!x.explanation))throw Error(`story-answers.json: ${key} 정답 15개를 확인하세요.`)
+  storyAnswers=answers
+  return {teams,booths,scoreConfig,scheduleBreaks,accessConfig,storyAnswers}
 }
