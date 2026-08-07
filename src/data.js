@@ -20,7 +20,7 @@ const pairings = {
 const make = (titles, descriptions) => titles.map((title,i)=>({id:`${i+1}`,title,description:descriptions[i],weight:10}))
 
 const A = {
-  id:'A', short:'빙고 다트', title:'주의 음성을 따라', verse:'요한복음 10:27', icon:'◎', accent:'#ffcf55',
+  id:'A', short:'블라인드 양궁', title:'주의 음성을 따라', verse:'요한복음 10:27', icon:'◎', accent:'#ffcf55',
   theme:'세상의 교란시키는 소리를 뒤로하고 참 목자이신 주님의 음성을 분별해요.',
   guide:'안대를 쓴 주자가 아군의 목소리만 따라 과녁으로 이동해 점을 찍습니다.',
   caution:'이동 경로의 장애물을 치우고, 교사는 주자 곁에서 충돌을 방지해 주세요.',
@@ -40,7 +40,7 @@ const B = {
 }
 
 const C = {
-  id:'C', short:'카드 순서 맞추기', title:'이야기 완성하기', verse:'전도서 4:9', icon:'▱', accent:'#9d7bff',
+  id:'C', short:'카드 순서 맞추기', title:'마음으로 전하는 이야기', verse:'전도서 4:9-10', icon:'▱', accent:'#9d7bff',
   theme:'내 고집을 내려놓고 지체의 말에 경청하며 하나님의 구원 계획을 완성해요.', guide:'카드를 보여주지 않고 말로 설명해 성경 사건의 순서를 맞춥니다.', caution:'카드를 직접 보여주거나 빼앗지 않고 모든 팀원이 말할 기회를 갖게 해 주세요.',
   missions:make(['경청의 고백','비밀 수호 선서','동행 하이파이브','소통의 칭찬','믿음의 구호','팀원 한마음 퀴즈','하나님 나라 선포','사랑의 안아주기','감사 기도 멘트','우주 탐험대 구호'],[
     '“지체의 목소리에 귀 기울이겠습니다!” 외치기','“내 카드를 절대 보여주지 않겠습니다!” 다짐하기','양옆 팀원과 손을 맞잡고 “함께하자!” 말하기','카드를 설명한 지체에게 “설명 최고야!” 칭찬','“하나님의 선하신 계획은 반드시 이루어집니다!” 선포','“우리 조장님의 성함은?” 맞추고 환호하기','“우리는 하나님 나라의 특별한 주인공!” 외치기','옆 지체를 안아주며 “네 말이 잘 보여!” 말하기','“하나님, 우리 조를 모아주셔서 감사합니다!” 외치기','“디포스 우주 탐험대, 미션 클리어 가자!” 외치기']),
@@ -76,12 +76,13 @@ export async function loadStaticConfig(){
   const base=[A,B,C,D]
   const configured=base.map(b=>{
     const gameCards=cardsConfig[b.id]
-    if(!Array.isArray(gameCards?.missions)||!Array.isArray(gameCards?.items))throw Error(`game-cards.json: 게임 ${b.id}의 missions/items를 확인하세요.`)
+    if(!Array.isArray(gameCards?.missions)||!Array.isArray(gameCards?.items)||!Number.isInteger(gameCards?.maxMissions)||gameCards.maxMissions<0)throw Error(`game-cards.json: 게임 ${b.id}의 maxMissions/missions/items를 확인하세요.`)
     const normalize=(cards,kind)=>cards.map((card,index)=>{const weight=Number(card.weight??1);if(!card.title||!card.description||!(weight>0))throw Error(`game-cards.json: 게임 ${b.id} ${kind} ${index+1}번 항목을 확인하세요.`);return {...card,id:String(card.id??index+1),weight}})
     const games=schedule.matchups[b.id]; if(!Array.isArray(games)||games.length!==schedule.rounds.length)throw Error(`schedule.json: 게임 ${b.id}의 대진 수를 확인하세요.`)
     games.flat().forEach(id=>{if(!ids.has(id))throw Error(`schedule.json: 알 수 없는 팀 ID ${id}`)})
     if(!details[b.id]?.title||!Array.isArray(details[b.id]?.rules))throw Error(`game-details.json: 게임 ${b.id} 상세 정보를 확인하세요.`)
-    return {...b,details:details[b.id],missions:normalize(gameCards.missions,'missions'),items:normalize(gameCards.items,'items'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
+    if(gameCards.maxMissions>gameCards.missions.length||gameCards.maxMissions>gameCards.items.length)throw Error(`game-cards.json: 게임 ${b.id}의 maxMissions가 카드 수보다 많습니다.`)
+    return {...b,details:details[b.id],maxMissions:gameCards.maxMissions,missions:normalize(gameCards.missions,'missions'),items:normalize(gameCards.items,'items'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
   })
   teams=schedule.teams; booths=configured; teamById=Object.fromEntries(teams.map(t=>[t.id,t]))
   for(const b of base){if(!Array.isArray(scores[b.id])||!scores[b.id].length)throw Error(`score-config.json: 게임 ${b.id}의 점수 항목이 없습니다.`);for(const c of scores[b.id])if(!c.id||!c.label||!(c.max>0))throw Error(`score-config.json: 게임 ${b.id} 항목 형식을 확인하세요.`)}
