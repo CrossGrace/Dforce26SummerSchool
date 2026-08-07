@@ -80,7 +80,7 @@ export async function loadStaticConfig(){
     const normalize=(cards,kind)=>cards.map((card,index)=>{const weight=Number(card.weight??1);if(!card.title||!card.description||!(weight>0))throw Error(`game-cards.json: 게임 ${b.id} ${kind} ${index+1}번 항목을 확인하세요.`);return {...card,id:String(card.id??index+1),weight}})
     const games=schedule.matchups[b.id]; if(!Array.isArray(games)||games.length!==schedule.rounds.length)throw Error(`schedule.json: 게임 ${b.id}의 대진 수를 확인하세요.`)
     games.flat().forEach(id=>{if(!ids.has(id))throw Error(`schedule.json: 알 수 없는 팀 ID ${id}`)})
-    if(!details[b.id]?.title||!Array.isArray(details[b.id]?.rules))throw Error(`game-details.json: 게임 ${b.id} 상세 정보를 확인하세요.`)
+    if(!details[b.id]?.title||!Array.isArray(details[b.id]?.rules)||!Array.isArray(details[b.id]?.scriptures)||!details[b.id].scriptures.length||details[b.id].scriptures.some(s=>!s.reference||!s.text))throw Error(`game-details.json: 게임 ${b.id} 상세 정보와 성경 말씀을 확인하세요.`)
     if(gameCards.maxMissions>gameCards.missions.length||gameCards.maxMissions>gameCards.items.length)throw Error(`game-cards.json: 게임 ${b.id}의 maxMissions가 카드 수보다 많습니다.`)
     return {...b,details:details[b.id],maxMissions:gameCards.maxMissions,missions:normalize(gameCards.missions,'missions'),items:normalize(gameCards.items,'items'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
   })
