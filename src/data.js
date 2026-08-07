@@ -87,7 +87,7 @@ export async function loadStaticConfig(){
     return {...b,details:details[b.id],maxMissions:gameCards.maxMissions,missions:normalize(gameCards.missions,'missions'),items:normalize(gameCards.items,'items'),rounds:schedule.rounds.map((r,i)=>({...r,teams:games[i]}))}
   })
   teams=schedule.teams; booths=configured; teamById=Object.fromEntries(teams.map(t=>[t.id,t]))
-  for(const b of base){if(!Array.isArray(scores[b.id])||!scores[b.id].length)throw Error(`score-config.json: 게임 ${b.id}의 점수 항목이 없습니다.`);for(const c of scores[b.id])if(!c.id||!c.label||!(c.max>0))throw Error(`score-config.json: 게임 ${b.id} 항목 형식을 확인하세요.`)}
+  for(const b of base){const config=scores[b.id];if(!config?.type||!Array.isArray(config.attitudes)||!config.attitudes.length||!(config.performanceMax>0))throw Error(`score-config.json: 게임 ${b.id}의 계산 설정을 확인하세요.`);for(const c of config.attitudes)if(!c.id||!c.label||!(c.max>0))throw Error(`score-config.json: 게임 ${b.id} 태도 항목 형식을 확인하세요.`)}
   scoreConfig=scores
   scheduleBreaks=Array.isArray(schedule.breaks)?schedule.breaks:scheduleBreaks
   if(!/^\d{4}$/.test(String(access.adminPassword))||!/^\d{4}$/.test(String(access.scorePassword)))throw Error('access.json 비밀번호는 숫자 4자리로 입력해 주세요.')

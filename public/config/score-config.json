@@ -1,14 +1,65 @@
 {
-  "A": [
-    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
-  ],
-  "B": [
-    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
-  ],
-  "C": [
-    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
-  ],
-  "D": [
-    {"id":"game","label":"게임 점수","max":10},{"id":"teamwork","label":"협동심","max":10},{"id":"care","label":"배려심","max":10},{"id":"cheer","label":"응원","max":10},{"id":"bonus","label":"추가 점수","max":10}
-  ]
+  "A": {
+    "type": "roundAverage",
+    "label": "라운드 평균",
+    "rounds": [
+      {"id":"gameRound1","label":"게임 1라운드 총점","max":40},
+      {"id":"gameRound2","label":"게임 2라운드 총점","max":40}
+    ],
+    "performanceMax": 40,
+    "attitudes": [
+      {"id":"teamwork","label":"협동","max":5},
+      {"id":"cheer","label":"응원","max":5},
+      {"id":"care","label":"상대 팀 배려","max":5},
+      {"id":"bonus","label":"교사 재량","max":5}
+    ]
+  },
+  "B": {
+    "type": "versusMission",
+    "label": "승패 · 미션",
+    "winPoints": 20,
+    "losePoints": 10,
+    "missionCount": 8,
+    "missionPoints": 2,
+    "performanceMax": 36,
+    "attitudes": [
+      {"id":"teamwork","label":"협동","max":5},
+      {"id":"cheer","label":"응원","max":5},
+      {"id":"care","label":"상대 팀 배려","max":5},
+      {"id":"bonus","label":"교사 재량","max":5}
+    ]
+  },
+  "C": {
+    "type": "wrongCards",
+    "label": "이야기 카드 오답",
+    "stories": [
+      {"id":"josephWrong","label":"요셉 이야기","maxWrong":15},
+      {"id":"lionKingWrong","label":"라이온킹","maxWrong":15},
+      {"id":"mosesWrong","label":"모세 이야기","maxWrong":15}
+    ],
+    "storyPoints": 15,
+    "penaltyPerWrong": 2,
+    "performanceMax": 45,
+    "attitudes": [
+      {"id":"teamwork","label":"협동","max":5},
+      {"id":"cheer","label":"응원","max":5},
+      {"id":"care","label":"상대 팀 배려","max":5},
+      {"id":"bonus","label":"교사 재량","max":5}
+    ]
+  },
+  "D": {
+    "type": "balloons",
+    "label": "풍선 획득",
+    "balloons": [
+      {"id":"teamBalloons","label":"우리 팀 풍선","max":8,"points":3},
+      {"id":"bonusBalloons","label":"보너스 풍선","max":6,"points":6}
+    ],
+    "performanceMax": 60,
+    "attitudes": [
+      {"id":"teamwork","label":"협동","max":5},
+      {"id":"cheer","label":"응원","max":5},
+      {"id":"care","label":"상대 팀 배려","max":5},
+      {"id":"bonus","label":"교사 재량","max":5}
+    ]
+  }
 }
