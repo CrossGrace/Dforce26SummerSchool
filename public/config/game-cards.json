@@ -1,6 +1,6 @@
 {
   "A": {
-    "maxMissions": 3,
+    "maxMissions": 2,
     "missions": [
       {"id":"1","title":"참 목자 단체 선포","description":"팀 전원이 어깨동무하고 ‘예수님은 우리 조의 참 목자이십니다!’를 3회 힘차게 선포하기","weight":1},
       {"id":"2","title":"하나님의 웅장한 작품","description":"팀원 전체가 몸으로 대형 하트를 만들며 ‘우리는 하나님이 지으신 최고의 작품!’ 외치기","weight":1},
@@ -43,7 +43,7 @@
     ]
   },
   "D": {
-    "maxMissions": 6,
+    "maxMissions": 3,
     "missions": [
       {"id":"1","title":"임재와 동행 선포","description":"팀 전원이 과녁판을 향해 손을 뻗고 ‘하나님은 우리와 함께 하신다!’를 3회 외치기","weight":1},
       {"id":"2","title":"사랑의 허그 & 격려","description":"팀원끼리 서로 허그하며 ‘실수해도 괜찮아! 화이팅!’ 응원하기","weight":1},
