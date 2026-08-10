@@ -1,0 +1,4 @@
+.cinematic .rocket-fleet .team-rocket {
+  animation: teamRocketLaunch 5.4s cubic-bezier(.3, .02, .55, 1) .15s both;
+}
+
