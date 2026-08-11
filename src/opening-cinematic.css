@@ -1,0 +1,67 @@
+.opening-animation {
+  position: absolute;
+  inset: 0;
+}
+
+.opening-video-layer {
+  position: absolute;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 1.2s ease, visibility 0s linear 1.2s;
+}
+
+.opening-video-layer.active {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.opening-video-layer.active.fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.opening-video-layer video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+.opening-page.video .opening-status {
+  z-index: 45;
+}
+
+.opening-page.video .opening-home {
+  z-index: 50;
+}
+
+@media (max-aspect-ratio: 3/4) {
+  .opening-video-layer::before {
+    content: '';
+    position: absolute;
+    inset: -8%;
+    background: url('/opening/space-stage.webp') center/cover;
+    filter: blur(24px) brightness(.38);
+    transform: scale(1.12);
+  }
+
+  .opening-video-layer video {
+    position: relative;
+    z-index: 1;
+    object-fit: contain;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opening-video-layer {
+    transition-duration: .35s;
+  }
+}

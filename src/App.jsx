@@ -4,6 +4,7 @@ import { ArrowLeft, BarChart3, BookOpen, Check, CircleAlert, Clock3, Crown, Gift
 import { booths, teams, teamById, scoreConfig, scheduleBreaks, accessConfig, storyAnswers, loadStaticConfig } from './data'
 import './operations.css'
 import './opening-fleet.css'
+import OpeningCinematic from './OpeningCinematic'
 
 const emptyState={version:1,booths:{}}
 const defaultRound={status:'waiting',scores:{},mvp:'',mvpTeam:'',mvps:{},notes:'',notesByTeam:{},sessions:{},missionLogs:{},missionPresets:{}}
@@ -29,7 +30,7 @@ export default function App(){
   const applyLive=state=>{latestRef.current=state;lastVersion.current=Math.max(lastVersion.current,Number(state.version)||0);setLive(state)}
   const load=async()=>{const startedEpoch=mutationEpoch.current;try{const r=await fetch('/.netlify/functions/state',{cache:'no-store'});if(!r.ok)throw Error();const state=await r.json();if(startedEpoch!==mutationEpoch.current||pendingWrites.current>0||(Number(state.version)||0)<lastVersion.current)return;applyLive(state);setOnline(true)}catch{setOnline(false);const saved=localStorage.getItem('dforce-state');if(saved&&!Object.keys(latestRef.current.booths||{}).length)applyLive(JSON.parse(saved))}}
   useEffect(()=>{loadStaticConfig().then(()=>setConfig({ready:true,error:''})).catch(e=>setConfig({ready:false,error:e.message}));load();const id=setInterval(load,2000);return()=>clearInterval(id)},[])
-  useEffect(()=>{if(route.page!=='opening'){stopOpeningMusic();return}getOpeningMusic().load();const startMusic=e=>{if(e.target.closest('.opening-start button,.opening-replay'))playOpeningMusic()};document.addEventListener('click',startMusic,true);return()=>{document.removeEventListener('click',startMusic,true);stopOpeningMusic()}},[route.page])
+  useEffect(()=>{if(route.page!=='opening')stopOpeningMusic();return()=>stopOpeningMusic()},[route.page])
   useEffect(()=>{if(route.page!=='admin')return;const id=setTimeout(()=>{const input=document.querySelector('.full-reset input');if(input)input.placeholder='비밀번호 4자리 입력'},0);return()=>clearTimeout(id)},[route.page])
   const save=next=>{const epoch=++mutationEpoch.current;pendingWrites.current++;applyLive(next);localStorage.setItem('dforce-state',JSON.stringify(next));writeChain.current=writeChain.current.then(async()=>{try{const r=await fetch('/.netlify/functions/state',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(next)});if(!r.ok)throw Error();const saved=await r.json();if(epoch===mutationEpoch.current)applyLive(saved);setOnline(true)}catch{setOnline(false)}finally{pendingWrites.current--}});return writeChain.current}
   const updateRound=(boothId,roundId,fn)=>{const next=clone(latestRef.current);next.booths??={};next.booths[boothId]??={};const current={...defaultRound,...next.booths[boothId][roundId]},updated=fn(current);if(updated.status==='active'&&current.status!=='active'){const booth=booths.find(b=>b.id===boothId),other=booth.rounds.find(r=>r.id!==roundId&&next.booths[boothId][r.id]?.status==='active');if(other){alert(`${other.label}이 진행중입니다.`);return}const index=booth.rounds.findIndex(r=>r.id===roundId),incomplete=booth.rounds.slice(0,index).find(r=>(next.booths[boothId][r.id]?.status||'waiting')!=='done');if(incomplete){alert(`${incomplete.label}을 먼저 완료해 주세요.`);return}}next.booths[boothId][roundId]=updated;save(next)}
@@ -41,7 +42,7 @@ export default function App(){
   const booth=booths.find(b=>b.id===route.booth)
   return <main className={route.page==='opening'?'opening-host':''}>{route.page!=='opening'&&<Starfield/>}{route.page!=='opening'&&<header><Brand onHome={()=>setRoute({page:'home'})}/><div className="header-actions">{route.page==='home'&&<button className="admin-button" onClick={()=>protectedGo({page:'admin'})}><Settings/>관리자</button>}<span className={`sync ${online?'ok':''}`}><i/>{online?'LIVE':'OFFLINE'}</span></div></header>}
     {route.page==='home'?<Home setRoute={setRoute} enter={(b,role)=>role==='score'?protectedGo({page:'booth',booth:b.id,role,round:'r1'}):setRoute({page:'booth',booth:b.id,role,round:'r1'})}/>:
-     route.page==='opening'?<Opening setRoute={setRoute} live={live}/>:
+     route.page==='opening'?<OpeningCinematic setRoute={setRoute} live={live}/>:
      route.page==='admin'?<Admin live={live} save={save} setRoute={setRoute} notify={notify}/>:
      route.page==='final'?<FinalScores live={live} setRoute={setRoute}/>:
      route.page==='dashboard'?<MonitorDashboard live={live} setRoute={setRoute}/>:
