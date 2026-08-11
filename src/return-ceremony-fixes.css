@@ -1,0 +1,19 @@
+.return-burst i {
+  left: var(--x);
+  top: var(--y);
+}
+
+.return-final-stars i {
+  left: var(--x);
+  top: var(--y);
+  animation: finalTwinkle var(--twinkle) ease-in-out infinite alternate;
+}
+
+.return-ships span {
+  animation: shipOrbit var(--duration) linear infinite;
+  animation-delay: var(--delay);
+}
+
+.return-orbit i {
+  transform: rotate(var(--tilt));
+}
