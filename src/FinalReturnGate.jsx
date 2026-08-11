@@ -77,7 +77,7 @@ export default function FinalReturnGate({ children, setRoute }) {
   }
 
   return <>
-    <audio ref={musicRef} src="/audio/opening-worship.mp4" preload="auto" />
+    <audio ref={musicRef} src="/audio/return-bgm.m4a" preload="auto" />
     <div className={`final-return-video ${phase === 'video' ? 'active' : ''} ${fading ? 'fading' : ''}`}>
       <video ref={videoRef} src="/finale/return-cinematic.mp4" preload="auto" playsInline onTimeUpdate={track} onEnded={finish} onError={finish} />
     </div>
