@@ -5,6 +5,7 @@ import { booths, teams, teamById, scoreConfig, scheduleBreaks, accessConfig, sto
 import './operations.css'
 import './opening-fleet.css'
 import OpeningCinematic from './OpeningCinematic'
+import FinalReturnGate from './FinalReturnGate'
 
 const emptyState={version:1,booths:{}}
 const defaultRound={status:'waiting',scores:{},mvp:'',mvpTeam:'',mvps:{},notes:'',notesByTeam:{},sessions:{},missionLogs:{},missionPresets:{}}
@@ -44,7 +45,7 @@ export default function App(){
     {route.page==='home'?<Home setRoute={setRoute} enter={(b,role)=>role==='score'?protectedGo({page:'booth',booth:b.id,role,round:'r1'}):setRoute({page:'booth',booth:b.id,role,round:'r1'})}/>:
      route.page==='opening'?<OpeningCinematic setRoute={setRoute} live={live}/>:
      route.page==='admin'?<Admin live={live} save={save} setRoute={setRoute} notify={notify}/>:
-     route.page==='final'?<FinalScores live={live} setRoute={setRoute}/>:
+     route.page==='final'?<FinalReturnGate setRoute={setRoute}><FinalScores live={live} setRoute={setRoute}/></FinalReturnGate>:
      route.page==='dashboard'?<MonitorDashboard live={live} setRoute={setRoute}/>:
      <Booth booth={booth} route={route} setRoute={setRoute} protectedGo={protectedGo} live={live} updateRound={updateRound} notify={notify}/>} 
     {gate&&<PinGate password={gate.page==='admin'?accessConfig.adminPassword:accessConfig.scorePassword} cancel={()=>setGate(null)} success={()=>{setRoute(gate);setGate(null)}}/>}{toast&&<div className="toast"><Check size={18}/>{toast}</div>}
