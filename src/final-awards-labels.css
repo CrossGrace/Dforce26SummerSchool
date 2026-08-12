@@ -9,13 +9,24 @@
   letter-spacing: .08em;
   text-align: center;
   text-shadow: 0 0 12px color-mix(in srgb, var(--team) 70%, transparent), 0 2px 2px #020817;
+  animation: awardLabelTwinkle 2.6s ease-in-out infinite alternate;
+  animation-delay: calc(var(--label-order, 0) * .28s);
 }
 
 .award-slot:disabled .award-slot-label {
-  opacity: .78;
+  opacity: .9;
 }
 
 .award-slot.revealed .award-slot-label {
   filter: brightness(1.25);
   text-shadow: 0 0 18px var(--team), 0 0 34px color-mix(in srgb, var(--team) 55%, transparent);
+}
+
+@keyframes awardLabelTwinkle {
+  0%, 25% { filter: brightness(.86); opacity: .82; }
+  70%, 100% { filter: brightness(1.28); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .award-slot-label { animation: none; }
 }

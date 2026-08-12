@@ -1,0 +1,43 @@
+.award-rocket {
+  width: 112px;
+  height: 186px;
+  top: 69px;
+  filter: drop-shadow(0 0 31px var(--team));
+}
+
+.award-rocket .rocket-body {
+  inset: 10px 16px 33px;
+  border-width: 4px;
+}
+
+.award-rocket .rocket-window {
+  top: 48px;
+  width: 33px;
+  height: 33px;
+  border-width: 5px;
+}
+
+.award-rocket .rocket-fin {
+  bottom: 24px;
+  width: 39px;
+  height: 64px;
+}
+
+.award-rocket .rocket-flame {
+  left: 39px;
+  bottom: -33px;
+  width: 34px;
+  height: 70px;
+}
+
+@keyframes awardRocketLandLarge {
+  0% { opacity:0;top:-310px;transform:translateX(-50%) scale(.78); }
+  16% { opacity:1; }
+  68% { top:86px;transform:translateX(-50%) scale(.9); }
+  82% { top:52px;transform:translateX(-50%) scale(.84); }
+  100% { opacity:1;top:69px;transform:translateX(-50%) scale(.8); }
+}
+
+.award-rocket {
+  animation-name: awardRocketLandLarge;
+}

@@ -1,0 +1,60 @@
+.final-awards-page {
+  position: relative;
+}
+
+.award-ambient-fleet {
+  position: absolute;
+  z-index: 0;
+  inset: 80px -6vw auto;
+  height: 330px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.award-ambient-fleet span {
+  position: absolute;
+  left: -60px;
+  top: calc(24px + var(--fleet-index) * 66px);
+  width: 25px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,.65);
+  border-radius: 50% 50% 30% 30%;
+  background: linear-gradient(90deg, color-mix(in srgb,var(--fleet-color) 65%,#fff),var(--fleet-color),color-mix(in srgb,var(--fleet-color) 48%,#111));
+  filter: drop-shadow(0 0 9px var(--fleet-color));
+  animation: ambientShipFlight calc(13s + var(--fleet-index) * 2.7s) linear infinite;
+  animation-delay: calc(var(--fleet-index) * -4.2s);
+}
+
+.award-ambient-fleet span:before,
+.award-ambient-fleet span:after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  width: 10px;
+  height: 16px;
+  background: var(--fleet-color);
+}
+
+.award-ambient-fleet span:before { left: -7px; clip-path: polygon(100% 0,100% 100%,0 100%); }
+.award-ambient-fleet span:after { right: -7px; clip-path: polygon(0 0,100% 100%,0 100%); }
+.award-ambient-fleet span i { position:absolute;left:50%;top:10px;width:9px;height:9px;translate:-50% 0;border:2px solid #19345f;border-radius:50%;background:#c9f6ff; }
+.award-ambient-fleet span b { position:absolute;left:8px;bottom:-15px;width:9px;height:20px;border-radius:50%;background:linear-gradient(#fff,#ffd84d,#ff5638,transparent); }
+
+@keyframes ambientShipFlight {
+  0% { left:-70px; transform:translateY(15px) rotate(72deg) scale(.8); opacity:0; }
+  8% { opacity:.82; }
+  28% { transform:translateY(-28px) rotate(82deg) scale(1); }
+  52% { transform:translateY(22px) rotate(75deg) scale(.86); }
+  76% { transform:translateY(-15px) rotate(84deg) scale(1.06); }
+  92% { opacity:.82; }
+  100% { left:calc(100% + 70px); transform:translateY(10px) rotate(78deg) scale(.82); opacity:0; }
+}
+
+@media (max-width:650px) {
+  .award-ambient-fleet { inset:100px -10px auto;height:280px; }
+  .award-ambient-fleet span { opacity:.72; }
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .award-ambient-fleet { display:none; }
+}

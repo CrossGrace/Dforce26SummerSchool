@@ -2,6 +2,8 @@ import { ArrowLeft, Crown, RefreshCw, Sparkles, Star, Trophy } from 'lucide-reac
 import { useState } from 'react'
 import './final-awards.css'
 import './final-awards-labels.css'
+import './final-awards-fleet.css'
+import './final-awards-rocket-size.css'
 
 const order = [3, 2, 1, 'mvp']
 
@@ -39,6 +41,9 @@ export default function FinalAwards({ live, setRoute, booths, teams, overall, ra
   const reset = () => setRevealed([])
 
   return <section className="final-page final-awards-page shell">
+    <div className="award-ambient-fleet" aria-hidden="true">
+      {['#ff526b', '#ffd95a', '#56e39f', '#5bbcff'].map((color, index) => <span key={color} style={{ '--fleet-color': color, '--fleet-index': index }}><i/><b/></span>)}
+    </div>
     <nav className="topnav"><button className="icon-btn" onClick={() => setRoute({ page: 'home' })}><ArrowLeft/></button><div><span>FINAL RANKING</span><b>최종 점수</b></div><span className="admin-crown"><Trophy/></span></nav>
     <div className="final-hero"><Crown/><p className="eyebrow">D:FORCE HONOR CEREMONY</p><h1>비전 탐험대 최종 시상식</h1><span>시상대를 3등부터 차례로 눌러 주세요.</span></div>
     <div className="award-stage-scroll"><div className="award-stage">
