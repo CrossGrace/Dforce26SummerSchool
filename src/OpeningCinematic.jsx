@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, RefreshCw, Rocket, Sparkles, Star } from 'lucide-react'
 import { booths } from './data'
 import './opening-cinematic.css'
+import './cinematic-skip.css'
 
 const rocketTeams = [
   ['red', '#ff526b', '#8e1738', '-22vw'],
@@ -117,6 +118,7 @@ export default function OpeningCinematic({ setRoute, live }) {
         onEnded={startAnimation}
         onError={phase === 'video' ? startAnimation : undefined}
       />
+      {phase === 'video' && <button className="cinematic-skip" onClick={startAnimation}>SKIP</button>}
     </div>
     <audio ref={musicRef} src="/audio/opening-worship.mp4" preload="auto" />
 

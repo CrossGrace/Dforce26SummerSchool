@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, Rocket } from 'lucide-react'
 import './final-return.css'
+import './cinematic-skip.css'
 
 export default function FinalReturnGate({ children, setRoute }) {
   const [phase, setPhase] = useState('ready')
@@ -80,6 +81,7 @@ export default function FinalReturnGate({ children, setRoute }) {
     <audio ref={musicRef} src="/audio/return-bgm.m4a" preload="auto" />
     <div className={`final-return-video ${phase === 'video' ? 'active' : ''} ${fading ? 'fading' : ''}`}>
       <video ref={videoRef} src="/finale/return-cinematic.mp4" preload="auto" playsInline onTimeUpdate={track} onEnded={finish} onError={finish} />
+      {phase === 'video' && <button className="cinematic-skip" onClick={finish}>SKIP</button>}
     </div>
     {phase === 'ready' && <section className="final-return-ready shell">
       <button className="final-return-home" onClick={home} aria-label="홈으로"><ArrowLeft /></button>

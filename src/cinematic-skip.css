@@ -1,0 +1,22 @@
+.cinematic-skip {
+  position: absolute;
+  z-index: 110;
+  right: max(12px, env(safe-area-inset-right));
+  top: max(12px, env(safe-area-inset-top));
+  border: 1px solid rgba(255, 255, 255, .3);
+  border-radius: 20px;
+  padding: 7px 11px;
+  background: rgba(2, 7, 20, .48);
+  color: rgba(255, 255, 255, .72);
+  font-size: 8px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.cinematic-skip:hover,
+.cinematic-skip:focus-visible {
+  border-color: rgba(255, 255, 255, .65);
+  color: #fff;
+}
