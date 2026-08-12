@@ -1,6 +1,7 @@
 import { ArrowLeft, Crown, RefreshCw, Sparkles, Star, Trophy } from 'lucide-react'
 import { useState } from 'react'
 import './final-awards.css'
+import './final-awards-labels.css'
 
 const order = [3, 2, 1, 'mvp']
 
@@ -47,13 +48,13 @@ export default function FinalAwards({ live, setRoute, booths, teams, overall, ra
         const particles = place === 1 ? 48 : place === 2 ? 32 : 20
         const rings = place === 1 ? 4 : place === 2 ? 3 : 2
         return <button key={place} className={`award-slot place-${place} ${open ? 'revealed' : ''}`} disabled={!enabled(place)} onClick={() => reveal(place)} style={{ '--team': team?.color || '#72809a' }}>
-          <span className="award-slot-label">{place}{place === 1 ? 'ST' : place === 2 ? 'ND' : 'RD'} PLACE</span><strong className="award-rank">{place}</strong>
+          <span className="award-slot-label">{place}{place === 1 ? 'ST' : place === 2 ? 'ND' : 'RD'} PLACE</span>
           {open && <><Effects count={particles} rings={rings}/><TeamRocket/></>}
           <div className="award-podium"><span className="award-wait">{enabled(place) ? '눌러서 공개' : '공개 대기'}</span>{open && <div className="award-result"><small>{place}등</small><b>{team?.name}</b><strong>{team?.score}점</strong></div>}</div>
         </button>
       })}
       <button className={`award-slot mvp-slot ${isOpen('mvp') ? 'revealed' : ''}`} disabled={!enabled('mvp') || !finalMvps.length} onClick={() => reveal('mvp')} style={{ '--team': '#f8c85c' }}>
-        <span className="award-slot-label">FINAL MVP</span><strong className="award-rank"><Star/></strong>
+        <span className="award-slot-label">FINAL MVP</span>
         {isOpen('mvp') && <><Effects count={54} rings={4}/><div className="award-people">{finalMvps.map((entry, index) => <MvpPerson key={`${entry.teamId}-${entry.name}-${index}`} entry={entry} team={teams[entry.teamId]} index={index}/>)}</div></>}
         <div className="award-podium"><span className="award-wait">{!finalMvps.length ? 'MVP 미설정' : enabled('mvp') ? '눌러서 공개' : '공개 대기'}</span>{isOpen('mvp') && <div className="award-result"><small>FINAL MVP</small><b>MVP 학생</b><strong>{finalMvps.length}명</strong></div>}</div>
       </button>

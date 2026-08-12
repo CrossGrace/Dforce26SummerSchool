@@ -1,0 +1,21 @@
+.award-slot-label {
+  z-index: 5;
+  left: 16px;
+  right: 16px;
+  top: 18px;
+  color: var(--team);
+  font-size: clamp(16px, 1.8vw, 23px);
+  font-weight: 1000;
+  letter-spacing: .08em;
+  text-align: center;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--team) 70%, transparent), 0 2px 2px #020817;
+}
+
+.award-slot:disabled .award-slot-label {
+  opacity: .78;
+}
+
+.award-slot.revealed .award-slot-label {
+  filter: brightness(1.25);
+  text-shadow: 0 0 18px var(--team), 0 0 34px color-mix(in srgb, var(--team) 55%, transparent);
+}
