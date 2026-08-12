@@ -86,7 +86,6 @@ export default function FinalReturnGate({ children, setRoute }) {
       <div className="final-return-star"><Rocket /><span /><span /></div>
       <p className="eyebrow">D:FORCE RETURN CEREMONY</p>
       <h1>비전 탐험대<br />귀환 준비 완료</h1>
-      <p>귀환 시네마틱이 끝나면 최종 순위 공개가 시작됩니다.</p>
       <button className="final-return-start" onClick={start}><Rocket /> 귀환 시작</button>
     </section>}
     {phase === 'results' && children}
