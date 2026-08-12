@@ -3,6 +3,7 @@ import { ArrowLeft, RefreshCw, Rocket, Sparkles, Star } from 'lucide-react'
 import { booths } from './data'
 import './opening-cinematic.css'
 import './cinematic-skip.css'
+import './opening-game-visibility.css'
 
 const rocketTeams = [
   ['red', '#ff526b', '#8e1738', '-22vw'],

@@ -1,0 +1,70 @@
+/* Large, high-contrast game and location cards for the opening projection. */
+.opening-game {
+  width: clamp(190px, 27vmin, 330px);
+  filter: drop-shadow(0 0 25px rgba(255, 210, 70, .65));
+}
+
+.opening-game figcaption {
+  bottom: -20px;
+  min-width: 96%;
+  padding: 10px 16px 11px;
+  border: 2px solid rgba(255, 222, 112, .75);
+  border-radius: 19px;
+  background: rgba(2, 8, 27, .92);
+  box-shadow: 0 9px 28px rgba(0, 0, 0, .55), 0 0 20px rgba(255, 211, 68, .22);
+  backdrop-filter: blur(12px);
+}
+
+.opening-game figcaption b {
+  font-size: clamp(12px, 1.1vw, 17px);
+  letter-spacing: .13em;
+  text-shadow: 0 0 10px rgba(255, 217, 90, .7);
+}
+
+.opening-game figcaption em {
+  margin-top: 3px;
+  font-size: clamp(14px, 1.35vw, 21px);
+  font-weight: 900;
+  text-shadow: 0 2px 7px #000;
+}
+
+.opening-game figcaption small {
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top-color: rgba(255, 222, 112, .42);
+  color: #fff2a6;
+  font-size: clamp(12px, 1.15vw, 18px);
+  letter-spacing: .03em;
+  text-shadow: 0 0 9px rgba(255, 220, 102, .55);
+}
+
+.opening-game figcaption small:before {
+  color: #c8d7f1;
+  font-size: clamp(9px, .75vw, 12px);
+}
+
+.game-a,.game-c { left: 4%; }
+.game-b,.game-d { right: 4%; }
+.game-a,.game-b { top: 12%; }
+.game-c,.game-d { bottom: 11%; }
+
+@media (max-aspect-ratio: 3/4) {
+  .opening-game { width: clamp(145px, 38vw, 225px); }
+  .opening-game figcaption { bottom:-15px;min-width:98%;padding:8px 10px 9px; }
+  .opening-game figcaption b { font-size:11px; }
+  .opening-game figcaption em { font-size:13px; }
+  .opening-game figcaption small { margin-top:5px;padding-top:5px;font-size:11px; }
+  .opening-game figcaption small:before { font-size:8px; }
+  .game-a,.game-c { left: 1%; }
+  .game-b,.game-d { right: 1%; }
+  .game-a,.game-b { top: 16%; }
+  .game-c,.game-d { bottom: 13%; }
+}
+
+@media (max-height: 600px) {
+  .opening-game { width: clamp(132px, 31vh, 205px); }
+  .opening-game figcaption { padding:6px 9px 7px;bottom:-12px; }
+  .opening-game figcaption b { font-size:9px; }
+  .opening-game figcaption em { font-size:11px; }
+  .opening-game figcaption small { margin-top:3px;padding-top:3px;font-size:9px; }
+}
