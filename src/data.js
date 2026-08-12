@@ -92,7 +92,7 @@ export async function loadStaticConfig(){
   scheduleBreaks=Array.isArray(schedule.breaks)?schedule.breaks:scheduleBreaks
   if(!/^\d{4}$/.test(String(access.adminPassword))||!/^\d{4}$/.test(String(access.scorePassword)))throw Error('access.json 비밀번호는 숫자 4자리로 입력해 주세요.')
   accessConfig={adminPassword:String(access.adminPassword),scorePassword:String(access.scorePassword)}
-  for(const key of ['joseph','lionKing','moses'])if(!answers[key]?.title||!answers[key]?.opening||!Array.isArray(answers[key]?.entries)||answers[key].entries.length!==15||answers[key].entries.some(x=>!x.scene||!x.explanation))throw Error(`story-answers.json: ${key} 오프닝과 정답 15개를 확인하세요.`)
+  for(const key of ['joseph','lionKing'])if(!answers[key]?.title||!answers[key]?.opening||!Array.isArray(answers[key]?.entries)||answers[key].entries.length!==15||answers[key].entries.some(x=>!x.scene||!x.explanation))throw Error(`story-answers.json: ${key} 오프닝과 정답 15개를 확인하세요.`)
   storyAnswers=answers
   return {teams,booths,scoreConfig,scheduleBreaks,accessConfig,storyAnswers}
 }

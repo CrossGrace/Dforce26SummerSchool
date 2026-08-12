@@ -28,7 +28,7 @@
     "items": []
   },
   "C": {
-    "maxMissions": 3,
+    "maxMissions": 2,
     "missions": [
       {"id":"1","title":"제자리 손 파도타기","description":"자리에 앉은 채 손만 높이 올렸다 내리며 2바퀴 파도타기 완수 (접촉·카드 노출 금지)","weight":1},
       {"id":"2","title":"성경/상식 OX 퀴즈","description":"팀원 절반 이상 정답 시 성공. 1번: 요셉의 아버지는 이삭이다? X, 야곱. 실패 시 2번: 토마토는 과일이다? X, 열매채소","weight":1},

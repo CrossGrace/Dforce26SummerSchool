@@ -31,15 +31,14 @@
   },
   "C": {
     "type": "wrongCards",
-    "label": "이야기 카드 오답",
+    "label": "이야기 카드 오답 갯수",
     "stories": [
       {"id":"josephWrong","label":"요셉 이야기","maxWrong":15},
-      {"id":"lionKingWrong","label":"라이온킹","maxWrong":15},
-      {"id":"mosesWrong","label":"모세 이야기","maxWrong":15}
+      {"id":"lionKingWrong","label":"라이언킹","maxWrong":15}
     ],
-    "storyPoints": 15,
+    "storyPoints": 20,
     "penaltyPerWrong": 2,
-    "performanceMax": 45,
+    "performanceMax": 40,
     "attitudes": [
       {"id":"teamwork","label":"협동","max":5},
       {"id":"cheer","label":"응원","max":5},
